@@ -43,7 +43,6 @@ android {
 
     defaultConfig {
         minSdkVersion 16
-        applicationId "finaldev.motion_sensors" //  Hier hinzugefügt!
     }
     lintOptions {
         disable 'InvalidPackage'
