@@ -9,17 +9,14 @@ import android.view.Surface
 import android.view.WindowManager
 import androidx.annotation.NonNull
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import io.flutter.embedding.engine.plugins.activity.ActivityAware
-import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.MethodChannel.Result
+import io.flutter.plugin.common.PluginRegistry.Registrar
 
 /** MotionSensorsPlugin */
-public class MotionSensorsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
+public class MotionSensorsPlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
   private val METHOD_CHANNEL_NAME = "motion_sensors/method"
   private val ACCELEROMETER_CHANNEL_NAME = "motion_sensors/accelerometer"
   private val GYROSCOPE_CHANNEL_NAME = "motion_sensors/gyroscope"
@@ -47,6 +44,14 @@ public class MotionSensorsPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
   private var absoluteOrientationStreamHandler: RotationVectorStreamHandler? = null
   private var screenOrientationStreamHandler: ScreenOrientationStreamHandler? = null
 
+  companion object {
+    @JvmStatic
+    fun registerWith(registrar: Registrar) {
+      val plugin = MotionSensorsPlugin()
+      plugin.setupEventChannels(registrar.context(), registrar.messenger())
+    }
+  }
+
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     val context = binding.applicationContext
     setupEventChannels(context, binding.binaryMessenger)
@@ -56,7 +61,7 @@ public class MotionSensorsPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
     teardownEventChannels()
   }
 
-  override fun onMethodCall(call: MethodCall, result: Result) {
+  override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
     when (call.method) {
       "isSensorAvailable" -> result.success(sensorManager!!.getSensorList(call.arguments as Int).isNotEmpty())
       "setSensorUpdateInterval" -> setSensorUpdateInterval(call.argument<Int>("sensorType")!!, call.argument<Int>("interval")!!)
