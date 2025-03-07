@@ -26,7 +26,7 @@ apply plugin: 'kotlin-android'
 
 android {
     namespace 'finaldev.motion_sensors' //  Beachte: Dies ist der Namespace, nicht der Paketname
-    compileSdkVersion 35 //was 31!
+    compileSdk 35 //was 31!
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -42,7 +42,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 21
+        minSdk 21
     }
     lintOptions {
         disable 'InvalidPackage'
