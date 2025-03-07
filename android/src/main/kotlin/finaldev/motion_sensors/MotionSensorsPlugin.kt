@@ -7,14 +7,14 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.view.Surface
 import android.view.WindowManager
-import androidx.annotation.NonNull
+import androidx.annotation.NonNull;
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.PluginRegistry.Registrar
 
+// translate from https://github.com/flutter/plugins/tree/master/packages/sensors
 /** MotionSensorsPlugin */
 public class MotionSensorsPlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
   private val METHOD_CHANNEL_NAME = "motion_sensors/method"
@@ -44,14 +44,6 @@ public class MotionSensorsPlugin : FlutterPlugin, MethodChannel.MethodCallHandle
   private var absoluteOrientationStreamHandler: RotationVectorStreamHandler? = null
   private var screenOrientationStreamHandler: ScreenOrientationStreamHandler? = null
 
-  companion object {
-    @JvmStatic
-    fun registerWith(registrar: Registrar) {
-      val plugin = MotionSensorsPlugin()
-      plugin.setupEventChannels(registrar.context(), registrar.messenger())
-    }
-  }
-
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     val context = binding.applicationContext
     setupEventChannels(context, binding.binaryMessenger)
@@ -68,6 +60,7 @@ public class MotionSensorsPlugin : FlutterPlugin, MethodChannel.MethodCallHandle
       else -> result.notImplemented()
     }
   }
+  
 
   private fun setupEventChannels(context: Context, messenger: BinaryMessenger) {
     sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -144,7 +137,9 @@ class StreamHandlerImpl(private val sensorManager: SensorManager, sensorType: In
     eventSink = null
   }
 
-  override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+  override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+
+  }
 
   override fun onSensorChanged(event: SensorEvent?) {
     val sensorValues = listOf(event!!.values[0], event.values[1], event.values[2])
@@ -177,7 +172,9 @@ class RotationVectorStreamHandler(private val sensorManager: SensorManager, sens
     eventSink = null
   }
 
-  override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+  override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+
+  }
 
   override fun onSensorChanged(event: SensorEvent?) {
     var matrix = FloatArray(9)
@@ -215,7 +212,9 @@ class ScreenOrientationStreamHandler(private val context: Context, private val s
     eventSink = null
   }
 
-  override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+  override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+
+  }
 
   override fun onSensorChanged(event: SensorEvent?) {
     val rotation = getScreenOrientation()
